@@ -6,10 +6,11 @@ class MiniMax:
 
     def availableMoves(self):
         moves = []
-        for i in range(1, 10):
+        for i in (4, 0, 2, 6, 8, 1, 3, 5, 7):
             if self.board.get(i) == ' ':
                 moves.append(i)
         return moves
+
 
     def getBestMove(self, AI):
         self.calls = 0
