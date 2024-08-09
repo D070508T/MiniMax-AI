@@ -1,72 +1,45 @@
 class Board:
     # Constructor that builds the board and sets it to empty
-    def __init__(self, board=' '*16):
+    def __init__(self, board=None):
         self.winning_combinations = (
-            (0, 1, 2),
-            (1, 2, 3),
-
-            (4, 5, 6),
-            (5, 6, 7),
-
-            (5, 9, 10),
-            (9, 10, 11),
-
-            (12, 13, 14),
-            (13, 14, 15),
-
-            (0, 4, 8),
-            (4, 8, 12),
-
-            (1, 5, 9),
-            (5, 9, 13),
-
-            (2, 6, 10),
-            (6, 10, 14),
-
-            (3, 7, 11),
-            (7, 11, 15),
-
-            (2, 5, 8),
-            (7, 10, 13),
-
-            (3, 6, 9),
-            (6, 9, 12),
-
-            (1, 6, 11),
-            (4, 9, 14),
-
-            (0, 5, 10),
-            (5, 10, 15)
+            (0, 1, 2),  # Row 1
+            (3, 4, 5),  # Row 2
+            (6, 7, 8),  # Row 3
+            (0, 3, 6),  # Column 1
+            (1, 4, 7),  # Column 2
+            (2, 5, 8),  # Column 3
+            (0, 4, 8),  # Diagonal 1
+            (2, 4, 6)   # Diagonal 2
         )
 
-        self.board = board
+        if board:
+            self.board = board.board
+        else:
+            self.board = '         '
 
     def rotate(self):
-        return (self.board[3] + self.board[7] + self.board[11] + self.board[15] +
-                self.board[2] + self.board[6] + self.board[10] + self.board[14] +
-                self.board[1] + self.board[5] + self.board[9] + self.board[13] +
-                self.board[0] + self.board[4] + self.board[8] + self.board[12])
+        return (self.board[6] + self.board[3] + self.board[0] +
+                self.board[7] + self.board[4] + self.board[1] +
+                self.board[8] + self.board[5] + self.board[2])
 
     def mirror(self, num):
         if num % 2 == 0:
-            return self.board[12:] + self.board[8:12] + self.board[4:8] + self.board[0:4]
-        return (self.board[3] + self.board[2] + self.board[1] + self.board[0] +
-                self.board[7] + self.board[6] + self.board[5] + self.board[4] +
-                self.board[11] + self.board[10] + self.board[9] + self.board[8] +
-                self.board[15] + self.board[14] + self.board[13] + self.board[12])
+            return self.board[6:9] + self.board[3:6] + self.board[0:3]
+        return (self.board[2] + self.board[1] + self.board[0] +
+                self.board[5] + self.board[4] + self.board[3] +
+                self.board[8] + self.board[7] + self.board[6])
 
     def variations(self):
-        variations = [self.board]
+        variations = []
 
-        newBoard = Board(self.board)
+        newBoard = Board(self)
 
         for i in range(3):
-            newBoard.board = newBoard.mirror(i)
-            variations.append(newBoard.board)
+            newBoard.mirror(i)
+            variations.append(Board(newBoard))
             for j in range(3):
-                newBoard.board = newBoard.rotate()
-                variations.append(newBoard.board)
-            newBoard.board = newBoard.rotate()
+                newBoard.rotate()
+                variations.append(Board(newBoard))
 
         return variations
 
@@ -76,7 +49,7 @@ class Board:
 
         self.board = self.board[:num - 1] + char
 
-        if num < 16:
+        if num < 9:
             self.board += oldBoard[num:]
 
     # Function that returns the state of the board. Who won, or if the game is still continuing, or if it's a tie
