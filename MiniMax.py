@@ -1,3 +1,6 @@
+from Board import Board
+
+
 class MiniMax:
     def __init__(self, board):
         self.board = board
@@ -11,6 +14,28 @@ class MiniMax:
                 moves.append(i)
         return moves
 
+    def oppositeValue(self, num):
+        if num == 1:
+            return -1
+        if num == -1:
+            return 1
+        return 0
+
+    def addBoard(self, board, value):
+        for var in board.variations():
+            self.tables[str(var)] = value
+
+            inverted = ''
+            for char in str(var):
+                if char == 'X':
+                    inverted += 'O'
+                elif char == 'O':
+                    inverted += 'X'
+                else:
+                    inverted += ' '
+
+            self.tables[inverted] = self.oppositeValue(value)
+
     def getBestMove(self, AI):
         self.calls = 0
         bestMove = None
@@ -19,7 +44,7 @@ class MiniMax:
             bestScore = -2
             for move in self.availableMoves():
                 self.board.place(move, 'X')
-                score = self.miniMax(False, 3)
+                score = self.miniMax(False)
                 self.board.place(move, ' ')
 
                 if score == 1:
@@ -32,7 +57,7 @@ class MiniMax:
             bestScore = 2
             for move in self.availableMoves():
                 self.board.place(move, 'O')
-                score = self.miniMax(True, 3)
+                score = self.miniMax(True)
                 self.board.place(move, ' ')
 
                 if score == -1:
@@ -43,9 +68,8 @@ class MiniMax:
                     bestMove = move
         return bestMove
 
-    def miniMax(self, maximizing, limit):
+    def miniMax(self, maximizing):
         self.calls += 1
-        limit -= 1
 
         if str(self.board) in self.tables:
             return self.tables[str(self.board)]
@@ -56,18 +80,18 @@ class MiniMax:
             return 1
         elif state == 'O':
             return -1
-        elif state == 'tie' or limit == 0:
+        elif state == 'tie':
             return 0
 
         if maximizing:
             bestScore = -2
             for move in self.availableMoves():
                 self.board.place(move, 'X')
-                score = self.miniMax(False, 3)
+                score = self.miniMax(False)
                 self.board.place(move, ' ')
 
                 if score == 1:
-                    self.tables[str(self.board)] = 1
+                    self.addBoard(Board(self.board), 1)
                     return 1
 
                 bestScore = max(bestScore, score)
@@ -75,15 +99,15 @@ class MiniMax:
             bestScore = 2
             for move in self.availableMoves():
                 self.board.place(move, 'O')
-                score = self.miniMax(True, 3)
+                score = self.miniMax(True)
                 self.board.place(move, ' ')
 
                 if score == -1:
-                    self.tables[str(self.board)] = -1
+                    self.addBoard(Board(self.board), -1)
                     return -1
 
                 bestScore = min(bestScore, score)
 
-        self.tables[str(self.board)] = bestScore
+        self.addBoard(Board(self.board), bestScore)
 
         return bestScore

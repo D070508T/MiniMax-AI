@@ -18,6 +18,42 @@ class Board:
     def get(self, n):
         return self.board[(n - 1) // 3][(n - 1) % 3]
 
+    # Rotates board
+    def rotate(self):
+        copy = [row[:] for row in self.board]
+
+        self.board = [
+            [copy[2][0], copy[1][0], copy[0][0]],
+            [copy[2][1], copy[1][1], copy[0][1]],
+            [copy[2][2], copy[1][2], copy[0][2]],
+        ]
+
+    # Mirrors board
+    def mirror(self, num):
+        if num % 2 == 0:
+            temp = [self.board[0][0], self.board[1][0], self.board[2][0]]
+            self.board[0][0], self.board[1][0], self.board[2][0] = self.board[0][2], self.board[1][2], self.board[2][2]
+            self.board[0][2], self.board[1][2], self.board[2][2] = temp
+        else:
+            temp = self.board[0]
+            self.board[0] = self.board[2]
+            self.board[2] = temp
+
+    # Returns all variations of the board
+    def variations(self):
+        variations = [Board(self)]
+
+        newBoard = Board(self)
+
+        for i in range(3):
+            newBoard.mirror(i)
+            variations.append(str(Board(newBoard)))
+            for j in range(3):
+                newBoard.rotate()
+                variations.append(str(Board(newBoard)))
+
+        return variations
+
     # Function that returns the state of the board. Who won, or if the game is still continuing, or if it's a tie
     def state(self):
         for i in range(3):
