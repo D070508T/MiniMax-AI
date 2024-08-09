@@ -48,3 +48,11 @@ class Board:
             if self.board == other.board:
                 return False
         return True
+
+    # Function that returns a string representation of the board
+    def __str__(self):
+        raw = ''
+        for row in self.board:
+            for char in row:
+                raw += char
+        return raw

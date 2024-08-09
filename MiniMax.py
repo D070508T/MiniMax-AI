@@ -2,6 +2,7 @@ class MiniMax:
     def __init__(self, board):
         self.board = board
         self.calls = 0
+        self.tables = {}
 
     def availableMoves(self):
         moves = []
@@ -44,6 +45,11 @@ class MiniMax:
 
     def miniMax(self, maximizing):
         self.calls += 1
+
+        if str(self.board) in self.tables:
+            return self.tables[str(self.board)]
+
+
         state = self.board.state()
 
         if state == 'X':
@@ -61,6 +67,7 @@ class MiniMax:
                 self.board.place(move, ' ')
 
                 if score == 1:
+                    self.tables[str(self.board)] = 1
                     return 1
 
                 bestScore = max(bestScore, score)
@@ -72,8 +79,11 @@ class MiniMax:
                 self.board.place(move, ' ')
 
                 if score == -1:
+                    self.tables[str(self.board)] = -1
                     return -1
 
                 bestScore = min(bestScore, score)
+
+        self.tables[str(self.board)] = bestScore
 
         return bestScore
