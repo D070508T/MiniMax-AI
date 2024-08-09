@@ -11,7 +11,6 @@ class MiniMax:
                 moves.append(i)
         return moves
 
-
     def getBestMove(self, AI):
         self.calls = 0
         bestMove = None
