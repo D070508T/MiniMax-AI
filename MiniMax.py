@@ -1,4 +1,5 @@
 class MiniMax:
+    #Constructor
     def __init__(self, board):
         self.board = board
         self.calls = 0
