@@ -18,14 +18,14 @@ for i in range(x):
     while board.state() == 'continue':
         empty = 0
         for j in range(1, 10):
-            if board.board[j - 1] == ' ':
+            if board.get(j) == ' ':
                 empty += 1
 
         minimax.getBestMove(False)
 
         while True:
-            num = random.randint(0, 8)
-            if board.board[num] == ' ':
+            num = random.randint(1, 9)
+            if board.get(num) == ' ':
                 break
 
         allCalls[empty] += minimax.calls
@@ -48,6 +48,6 @@ for call in allCalls:
     total += call
 
 print(f'''\ntotal calls: {total}\n
-time elapsed: {round(elapsed * 1_000_000)} microseconds
-time per run: {round((elapsed / count) * 1_000_000)} microseconds
-time per call: {round((elapsed / total) * 1_000_000)} microseconds''')
+time elapsed: {round(elapsed, 2)} seconds
+time per run: {round(elapsed / count, 2)} seconds
+time per call: {elapsed / total} seconds''')
