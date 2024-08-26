@@ -1,5 +1,4 @@
 #Minimax
-
 from Board import Board
 
 
