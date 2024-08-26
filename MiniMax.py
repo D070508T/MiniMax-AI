@@ -1,3 +1,4 @@
+#Minimax
 class MiniMax:
     #Constructor
     def __init__(self, board):
