@@ -1,3 +1,4 @@
+#Main code
 import random
 import time
 
