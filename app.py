@@ -18,15 +18,15 @@ for i in range(x):
 
     while board.state() == 'continue':
         empty = 0
-        for j in range(1, 10):
-            if board.get(j) == ' ':
+        for j in range(9):
+            if board.board[j] == ' ':
                 empty += 1
 
         minimax.getBestMove(False)
 
         while True:
-            num = random.randint(1, 9)
-            if board.get(num) == ' ':
+            num = random.randint(0, 8)
+            if board.board[num] == ' ':
                 break
 
         allCalls[empty] += minimax.calls
