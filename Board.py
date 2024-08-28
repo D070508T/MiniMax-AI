@@ -1,6 +1,5 @@
-#Board
 class Board:
-    # Constructor that builds the board and sets it to empty if none given
+    # Constructor that builds the board and sets it to empty
     def __init__(self, board=None):
         self.winning_combinations = (
             (0, 1, 2),  # Row 1
@@ -69,3 +68,4 @@ class Board:
         if self.board in boards:
             return False
         return True
+    
