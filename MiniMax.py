@@ -23,6 +23,9 @@ class MiniMax:
                 score = self.miniMax(False, 5)
                 self.board.place(move, ' ')
 
+                if score == 1:
+                    return move
+
                 if score > bestScore:
                     bestScore = score
                     bestMove = move
@@ -32,6 +35,9 @@ class MiniMax:
                 self.board.place(move, 'O')
                 score = self.miniMax(True, 5)
                 self.board.place(move, ' ')
+
+                if score == -1:
+                    return move
 
                 if score < bestScore:
                     bestScore = score
@@ -55,6 +61,10 @@ class MiniMax:
                 self.board.place(move, 'X')
                 score = self.miniMax(False, limit-1)
                 self.board.place(move, ' ')
+
+                if score == 1:
+                    return 1
+
                 bestScore = max(bestScore, score)
         else:
             bestScore = 2
@@ -62,6 +72,10 @@ class MiniMax:
                 self.board.place(move, 'O')
                 score = self.miniMax(True, limit-1)
                 self.board.place(move, ' ')
+
+                if score == -1:
+                    return -1
+
                 bestScore = min(bestScore, score)
 
         return bestScore
