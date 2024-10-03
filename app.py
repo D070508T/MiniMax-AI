@@ -51,6 +51,6 @@ while True:
         total += call
 
     print(f'''\ntotal calls: {total}\n
-    time elapsed: {round(elapsed*1000, 2)} milliseconds
-    time per run: {round((elapsed*1000) / count, 2)} milliseconds
-    time per call: {(elapsed*1000000) / total} microseconds''')
+time elapsed: {round(elapsed*1000, 2)} milliseconds
+time per run: {round((elapsed*1000) / count, 2)} milliseconds
+time per call: {(elapsed*1000000) / total} microseconds''')
