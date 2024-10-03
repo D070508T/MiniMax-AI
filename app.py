@@ -1,54 +1,56 @@
-#Main code
+#Main
 import random
 import time
 
 from Board import Board
 from MiniMax import MiniMax
 
-allCalls = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-count = 0
+while True:
 
-x = int(input('How many times would you like to run: '))
+    allCalls = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    count = 0
 
-start = time.time()
-for i in range(x):
-    count += 1
-    board = Board()
-    minimax = MiniMax(board)
+    x = int(input('How many times would you like to run: '))
 
-    while board.state() == 'continue':
-        empty = 0
-        for j in range(1, 10):
-            if board.get(j) == ' ':
-                empty += 1
+    start = time.time()
+    for i in range(x):
+        count += 1
+        board = Board()
+        minimax = MiniMax(board)
 
-        minimax.getBestMove(False)
+        while board.state() == 'continue':
+            empty = 0
+            for j in range(9):
+                if board.board[j] == ' ':
+                    empty += 1
 
-        while True:
-            num = random.randint(1, 9)
-            if board.get(num) == ' ':
-                break
+            minimax.getBestMove(False)
 
-        allCalls[empty] += minimax.calls
+            while True:
+                num = random.randint(0, 8)
+                if board.board[num] == ' ':
+                    break
 
-        board.place(num, 'O')
+            allCalls[empty] += minimax.calls
 
-        if board.state() == 'continue':
-            board.place(minimax.getBestMove(True), 'X')
+            board.place(num, 'O')
 
-        allCalls[empty - 1] += minimax.calls
+            if board.state() == 'continue':
+                board.place(minimax.getBestMove(True), 'X')
 
-elapsed = time.time() - start
+            allCalls[empty - 1] += minimax.calls
 
-for i in range(1, 10):
-    allCalls[i] = round(allCalls[i] / count, 1)
-    print(f'{i} available moves: {allCalls[i]}')
+    elapsed = time.time() - start
 
-total = 0
-for call in allCalls:
-    total += call
+    for i in range(1, 10):
+        allCalls[i] = round(allCalls[i] / count, 1)
+        print(f'{i} available moves: {allCalls[i]}')
 
-print(f'''\ntotal calls: {total}\n
-time elapsed: {round(elapsed, 2)} seconds
-time per run: {round(elapsed / count, 2)} seconds
-time per call: {elapsed / total} seconds''')
+    total = 0
+    for call in allCalls:
+        total += call
+
+    print(f'''\ntotal calls: {total}\n
+time elapsed: {round(elapsed*1000, 2)} milliseconds
+time per run: {round((elapsed*1000) / count, 2)} milliseconds
+time per call: {(elapsed*100000) / total} microseconds''')
