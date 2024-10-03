@@ -1,89 +1,56 @@
-#Minimax
-class MiniMax:
-    def __init__(self, board):
-        self.board = board
-        self.calls = 0
-        self.tables = {}
+#Main
+import random
+import time
 
-    def availableMoves(self):
-        moves = []
-        for i in range(1, 10):
-            if self.board.get(i) == ' ':
-                moves.append(i)
-        return moves
+from Board import Board
+from MiniMax import MiniMax
 
-    def getBestMove(self, AI):
-        self.calls = 0
-        bestMove = None
+while True:
 
-        if AI:
-            bestScore = -2
-            for move in self.availableMoves():
-                self.board.place(move, 'X')
-                score = self.miniMax(False, 5)
-                self.board.place(move, ' ')
+    allCalls = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    count = 0
 
-                if score == 1:
-                    return move
+    x = int(input('How many times would you like to run: '))
 
-                if score > bestScore:
-                    bestScore = score
-                    bestMove = move
-        else:
-            bestScore = 2
-            for move in self.availableMoves():
-                self.board.place(move, 'O')
-                score = self.miniMax(True, 5)
-                self.board.place(move, ' ')
+    start = time.time()
+    for i in range(x):
+        count += 1
+        board = Board()
+        minimax = MiniMax(board)
 
-                if score == -1:
-                    return move
+        while board.state() == 'continue':
+            empty = 0
+            for j in range(9):
+                if board.board[j] == ' ':
+                    empty += 1
 
-                if score < bestScore:
-                    bestScore = score
-                    bestMove = move
-        return bestMove
+            minimax.getBestMove(False)
 
-    def miniMax(self, maximizing, limit):
-        self.calls += 1
+            while True:
+                num = random.randint(0, 8)
+                if board.board[num] == ' ':
+                    break
 
-        if str(self.board) in self.tables:
-            return self.tables[str(self.board)]
+            allCalls[empty] += minimax.calls
 
-        state = self.board.state()
+            board.place(num, 'O')
 
-        if state == 'X':
-            return 1
-        elif state == 'O':
-            return -1
-        elif state == 'tie':
-            return 0
+            if board.state() == 'continue':
+                board.place(minimax.getBestMove(True), 'X')
 
-        if maximizing:
-            bestScore = -2
-            for move in self.availableMoves():
-                self.board.place(move, 'X')
-                score = self.miniMax(False, limit-1)
-                self.board.place(move, ' ')
+            allCalls[empty - 1] += minimax.calls
 
-                if score == 1:
-                    self.tables[str(self.board)] = 1
-                    return 1
+    elapsed = time.time() - start
 
-                bestScore = max(bestScore, score)
-        else:
-            bestScore = 2
-            for move in self.availableMoves():
-                self.board.place(move, 'O')
-                score = self.miniMax(True, limit-1)
-                self.board.place(move, ' ')
+    for i in range(1, 10):
+        allCalls[i] = round(allCalls[i] / count, 1)
+        print(f'{i} available moves: {allCalls[i]}')
 
-                if score == -1:
-                    self.tables[str(self.board)] = -1
-                    return -1
+    total = 0
+    for call in allCalls:
+        total += call
 
-                bestScore = min(bestScore, score)
-
-        self.tables[str(self.board)] = bestScore
-
-        return bestScore
+    print(f'''\ntotal calls: {total}\n
+time elapsed: {round(elapsed*1000, 2)} milliseconds
+time per run: {round((elapsed*1000) / count, 2)} milliseconds
+time per call: {(elapsed*100000) / total} microseconds''')
