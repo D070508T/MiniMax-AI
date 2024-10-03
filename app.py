@@ -1,4 +1,4 @@
-#Main
+#Main code
 import random
 import time
 
@@ -20,15 +20,15 @@ while True:
 
         while board.state() == 'continue':
             empty = 0
-            for j in range(9):
-                if board.board[j] == ' ':
+            for j in range(1, 10):
+                if board.get(j) == ' ':
                     empty += 1
 
             minimax.getBestMove(False)
 
             while True:
-                num = random.randint(0, 8)
-                if board.board[num] == ' ':
+                num = random.randint(1, 9)
+                if board.get(num) == ' ':
                     break
 
             allCalls[empty] += minimax.calls
@@ -53,4 +53,4 @@ while True:
     print(f'''\ntotal calls: {total}\n
 time elapsed: {round(elapsed*1000, 2)} milliseconds
 time per run: {round((elapsed*1000) / count, 2)} milliseconds
-time per call: {(elapsed*100000) / total} microseconds''')
+time per call: {(elapsed*1000000) / total} microseconds''')
